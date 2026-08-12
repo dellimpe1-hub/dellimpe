@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 430" role="img" aria-labelledby="title desc">
+  <title id="title">DELL LIMPE</title><desc id="desc">Sol, telhados com painéis fotovoltaicos e nome DELL LIMPE</desc>
+  <defs><linearGradient id="sun" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffb20a"/><stop offset="1" stop-color="#ff5418"/></linearGradient><linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#08b5e8"/><stop offset="1" stop-color="#045aaa"/></linearGradient></defs>
+  <g fill="url(#sun)"><path d="M138 180a126 126 0 0 1 244 0L260 146Z"/><path d="m258 25-10 39h25zM196 39l6 37 22-9zM140 72l20 30 18-17zM99 120l31 17 10-22zM320 66l22 10 5-37zM369 88l19 17 20-31zM395 132l9 23 33-18z"/></g>
+  <path fill="#fff" stroke="#0695d4" stroke-width="13" stroke-linejoin="round" d="m63 246 94-93 79 78 68-94 151 125-99-25-54-45-52 70-91-57-55 54z"/>
+  <g fill="url(#blue)" stroke="#fff" stroke-width="4"><path d="m154 160 83 83-38 4-72-68z"/><path d="m305 145 137 111-43-8-111-88z"/><path d="m318 168 29 23 22-2-30-24zM353 195l29 23 23-1-30-24zM275 178l29 23 23-2-30-23zM310 204l29 23 24-1-31-24zM143 181l26 24 20 1-27-26zM173 210l28 25 21 1-29-27z"/></g>
+  <path fill="url(#sun)" d="M38 271c104 24 185-17 283-12 58 3 112 19 161 42-125-33-205-24-304 5-60 18-107 7-140-35Z"/>
+  <path fill="#0761ad" d="M137 316c115 22 206-32 330-1-125-7-195 44-330 1Z"/>
+  <text x="260" y="374" text-anchor="middle" fill="#0566ae" font-family="Arial Black,Arial,sans-serif" font-size="58" font-weight="900" letter-spacing="4">DELL LIMPE</text>
+  <text x="260" y="409" text-anchor="middle" fill="#292929" font-family="Arial,sans-serif" font-size="18" font-weight="700" letter-spacing="8">SERVIÇOS FOTOVOLTAICOS</text>
+</svg>
