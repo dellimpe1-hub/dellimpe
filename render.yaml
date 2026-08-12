@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: dellimpe-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn server:app --workers 1 --timeout 120
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://dellimpe1-hub.github.io

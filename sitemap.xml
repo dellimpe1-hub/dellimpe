@@ -6,4 +6,10 @@
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/instalacao-de-paineis.html</loc><priority>0.8</priority></url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/instalacao-de-sistemas-fotovoltaicos.html</loc><priority>0.8</priority></url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/instalacao-eletrica.html</loc><priority>0.8</priority></url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/manutencao-preventiva-fotovoltaica.html</loc><priority>0.8</priority></url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/limpeza-dos-paineis-solares.html</loc><priority>0.8</priority></url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/manutencao-de-sistemas-fotovoltaicos.html</loc><priority>0.8</priority></url>
 </urlset>
