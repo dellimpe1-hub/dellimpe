@@ -13,3 +13,5 @@ services:
         value: https://dellimpe1-hub.github.io
       - key: ADMIN_TOKEN
         sync: false
+      - key: SITE_PASSWORD
+        sync: false
