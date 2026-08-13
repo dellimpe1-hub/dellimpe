@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3ynhWPjMZNVZEMT2myOQZq3MzZC0c=" crossorigin="">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"LocalBusiness","name":"DELL LIMPE","description":"Serviços especializados para sistemas fotovoltaicos.","email":"dellimpe1@gmail.com","telephone":"+55 16 9999-9999","taxID":"54.000.000/0001-00","address":{"@type":"PostalAddress","addressLocality":"São Carlos","addressRegion":"SP","addressCountry":"BR"},"areaServed":{"@type":"City","name":"São Carlos"}}
   </script>
@@ -50,9 +50,11 @@
     .brand-copy{display:grid;line-height:1}
     .brand-copy strong{font:900 1.12rem Montserrat,sans-serif;color:var(--blue);letter-spacing:.04em}
     .brand-copy span{font-size:.54rem;letter-spacing:.19em;color:var(--muted);text-transform:uppercase;margin-top:6px;font-weight:800}
-    .nav-links{list-style:none;display:flex;align-items:center;gap:30px;font-size:.86rem;font-weight:700}
+    .nav-links{list-style:none;display:flex;align-items:center;gap:24px;font-size:.84rem;font-weight:700}
     .nav-links a:not(.nav-cta){transition:.2s;color:#3a5066}
     .nav-links a:not(.nav-cta):hover{color:var(--orange)}
+    .nav-admin{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid var(--line);border-radius:99px}
+    .nav-admin::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--orange)}
     .nav-cta{padding:11px 18px;border-radius:99px;background:var(--blue);color:#fff}
     .menu-button{display:none;width:44px;height:44px;border:0;background:none;position:relative;z-index:2;cursor:pointer}
     .menu-button span{display:block;width:25px;height:2px;background:var(--blue-dark);margin:6px auto;transition:.25s}
@@ -126,7 +128,7 @@
       </a>
       <button class="menu-button" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
       <ul class="nav-links">
-        <li><a href="#inicio">Início</a></li><li><a href="#servicos">Serviços</a></li><li><a href="#empresa">Empresa</a></li><li><a href="#processo">Como funciona</a></li><li><a class="nav-cta" href="#contato">Solicitar orçamento</a></li>
+        <li><a href="#inicio">Início</a></li><li><a href="#servicos">Serviços</a></li><li><a href="#empresa">Empresa</a></li><li><a href="#processo">Como funciona</a></li><li><a class="nav-admin" href="admin.html">Admin</a></li><li><a class="nav-cta" href="#contato">Solicitar orçamento</a></li>
       </ul>
     </div>
   </header>
