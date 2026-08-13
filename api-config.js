@@ -1,2 +1,2 @@
-// Informe aqui apenas a URL pública da API depois de hospedá-la. Nunca inclua DATABASE_URL neste arquivo.
-window.DELL_LIMPE_API = '';
+// URL pública da API. A credencial do Neon permanece somente no ambiente do Render.
+window.DELL_LIMPE_API = 'https://dellimpe-api.onrender.com';
