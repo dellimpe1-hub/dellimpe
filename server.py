@@ -123,7 +123,7 @@ def create_site_token():
 
 def site_token_authorized():
     if not SITE_PASSWORD:
-        return True
+        return False
     authorization = request.headers.get("Authorization", "")
     if not authorization.startswith("Bearer "):
         return False
@@ -141,7 +141,7 @@ def site_token_authorized():
 @app.post("/api/acesso")
 def liberar_site():
     if not SITE_PASSWORD:
-        return jsonify({"liberado": True, "token": ""})
+        return jsonify({"message": "A senha de visitação ainda não foi configurada."}), 503
     password = str((request.get_json(silent=True) or {}).get("senha", ""))
     if not hmac.compare_digest(password, SITE_PASSWORD):
         return jsonify({"message": "Senha incorreta."}), 401
