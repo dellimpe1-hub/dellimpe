@@ -11,3 +11,5 @@ services:
         sync: false
       - key: ALLOWED_ORIGINS
         value: https://dellimpe1-hub.github.io
+      - key: ADMIN_TOKEN
+        sync: false
