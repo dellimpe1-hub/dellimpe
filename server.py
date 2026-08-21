@@ -1,8 +1,5 @@
 import datetime
-import base64
-import hashlib
 import hmac
-import json
 import os
 
 from flask import Flask, Response, jsonify, request
@@ -14,8 +11,6 @@ from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024
 ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "").strip()
-SITE_PASSWORD = os.environ.get("SITE_PASSWORD", "").strip()
-SITE_TOKEN_TTL = 12 * 60 * 60
 
 allowed_origins = [
     origin.strip()
@@ -112,47 +107,6 @@ def require_admin():
         return float(value.replace(",", "."))
     except (AttributeError, ValueError):
         return None
-
-
-def create_site_token():
-    payload = {"exp": int(datetime.datetime.now(datetime.timezone.utc).timestamp()) + SITE_TOKEN_TTL}
-    encoded = base64.urlsafe_b64encode(json.dumps(payload, separators=(",", ":")).encode()).decode().rstrip("=")
-    signature = hmac.new(SITE_PASSWORD.encode(), encoded.encode(), hashlib.sha256).hexdigest()
-    return f"{encoded}.{signature}"
-
-
-def site_token_authorized():
-    if not SITE_PASSWORD:
-        return False
-    authorization = request.headers.get("Authorization", "")
-    if not authorization.startswith("Bearer "):
-        return False
-    try:
-        encoded, signature = authorization[7:].split(".", 1)
-        expected = hmac.new(SITE_PASSWORD.encode(), encoded.encode(), hashlib.sha256).hexdigest()
-        if not hmac.compare_digest(signature, expected):
-            return False
-        payload = json.loads(base64.urlsafe_b64decode(encoded + "=" * (-len(encoded) % 4)))
-        return int(payload["exp"]) > int(datetime.datetime.now(datetime.timezone.utc).timestamp())
-    except (KeyError, TypeError, ValueError, json.JSONDecodeError):
-        return False
-
-
-@app.post("/api/acesso")
-def liberar_site():
-    if not SITE_PASSWORD:
-        return jsonify({"message": "A senha de visitação ainda não foi configurada."}), 503
-    password = str((request.get_json(silent=True) or {}).get("senha", ""))
-    if not hmac.compare_digest(password, SITE_PASSWORD):
-        return jsonify({"message": "Senha incorreta."}), 401
-    return jsonify({"liberado": True, "token": create_site_token(), "validade_horas": 12})
-
-
-@app.get("/api/acesso/verificar")
-def verificar_acesso_site():
-    if not site_token_authorized():
-        return jsonify({"liberado": False}), 401
-    return jsonify({"liberado": True})
 
 
 @app.get("/")
