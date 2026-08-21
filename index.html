@@ -181,7 +181,7 @@
     menuButton.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');menuButton.classList.toggle('active',open);menuButton.setAttribute('aria-expanded',String(open));document.body.classList.toggle('menu-open',open)});
     navLinks.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{navLinks.classList.remove('open');menuButton.classList.remove('active');menuButton.setAttribute('aria-expanded','false');document.body.classList.remove('menu-open')}));
     const serviceTrack=document.getElementById('servicesTrack');
-    const serviceCards=[...serviceTrack.children];
+    let serviceCards=[...serviceTrack.children];
     const servicesDots=document.querySelector('.services-dots');
     let servicesIndex=0;
     const cardsVisible=()=>window.innerWidth<=760?1:window.innerWidth<=960?2:3;
@@ -192,7 +192,7 @@
     document.querySelector('.services-next').addEventListener('click',()=>showServices(servicesIndex+1));
     window.addEventListener('resize',()=>{servicesIndex=Math.min(servicesIndex,maxServiceIndex());buildServiceDots();showServices(servicesIndex)});
     buildServiceDots();
-    const loadServiceCustomizations=async()=>{const api=(window.DELL_LIMPE_API||'').replace(/\/$/,'');if(!api)return;try{const response=await fetch(`${api}/api/servicos`);if(!response.ok)return;const data=await response.json();(data.servicos||[]).forEach(item=>{const card=document.querySelector(`[data-service-key="${item.chave}"]`);if(!card)return;card.querySelector('h3').textContent=item.titulo;card.querySelector('p').textContent=item.descricao;if(item.imagem_url)card.querySelector('img').src=api+item.imagem_url})}catch{}};
+    const loadServiceCustomizations=async()=>{const api=(window.DELL_LIMPE_API||'').replace(/\/$/,'');if(!api)return;try{const response=await fetch(`${api}/api/servicos`);if(!response.ok)return;const data=await response.json();(data.servicos||[]).forEach(item=>{let card=document.querySelector(`[data-service-key="${item.chave}"]`);if(!card){card=document.createElement('article');card.className='service-card';card.dataset.serviceKey=item.chave;card.innerHTML='<img alt="" loading="lazy"><div class="service-card-body"><span class="service-number"></span><h3></h3><p></p><a class="service-link">Solicitar orçamento</a></div>';card.querySelector('.service-number').textContent=`SERVIÇO ${String(serviceTrack.children.length+1).padStart(2,'0')}`;serviceTrack.appendChild(card)}card.querySelector('h3').textContent=item.titulo;card.querySelector('p').textContent=item.descricao;if(item.personalizado)card.querySelector('.service-link').href=`?servico=${encodeURIComponent(item.titulo)}#contato`;if(item.imagem_url)card.querySelector('img').src=api+item.imagem_url;const select=document.getElementById('servico');if(![...select.options].some(option=>option.value===item.titulo)){const option=document.createElement('option');option.value=item.titulo;option.textContent=item.titulo;select.appendChild(option)}if(new URLSearchParams(location.search).get('servico')===item.titulo)select.value=item.titulo;if(item.personalizado&&item.imagem_url&&!document.querySelector(`.panel-slide[data-service-key="${item.chave}"]`)){const slide=document.createElement('img');slide.className='panel-slide';slide.dataset.serviceKey=item.chave;slide.alt='';slide.src=api+item.imagem_url;document.getElementById('heroPanel').appendChild(slide)}});serviceCards=[...serviceTrack.children];panelSlides=[...document.querySelectorAll('.panel-slide')];buildServiceDots();showServices(servicesIndex)}catch{}};
     loadServiceCustomizations();
 
     const cityInput=document.getElementById('cidade');
@@ -242,7 +242,7 @@
     document.querySelector('.carousel-next').addEventListener('click',()=>showCarouselSlide(carouselIndex+1));
     carouselDots.forEach((dot,index)=>dot.addEventListener('click',()=>showCarouselSlide(index)));
     if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()=>showCarouselSlide(carouselIndex+1),4500);
-    const panelSlides=[...document.querySelectorAll('.panel-slide')];
+    let panelSlides=[...document.querySelectorAll('.panel-slide')];
     let panelIndex=0;
     if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()=>{panelIndex=(panelIndex+1)%panelSlides.length;panelSlides.forEach((slide,index)=>slide.classList.toggle('active',index===panelIndex))},3800);
     if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el))}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'))}

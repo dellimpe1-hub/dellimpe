@@ -1,6 +1,8 @@
 import datetime
 import hmac
 import os
+import re
+import unicodedata
 
 from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
@@ -90,6 +92,23 @@ SERVICE_KEYS = {
     "limpeza-paineis",
     "manutencao-sistema-fotovoltaico",
 }
+
+
+def service_key(title):
+    normalized = unicodedata.normalize("NFKD", title).encode("ascii", "ignore").decode().lower()
+    return re.sub(r"[^a-z0-9]+", "-", normalized).strip("-")[:65] or "servico"
+
+
+def service_image():
+    image = request.files.get("imagem")
+    if not image or not image.filename:
+        return None, None, None
+    if image.mimetype not in {"image/jpeg", "image/png", "image/webp"}:
+        return None, None, (jsonify({"message": "Envie uma imagem JPG, PNG ou WebP."}), 400)
+    content = image.read()
+    if len(content) > 4 * 1024 * 1024:
+        return None, None, (jsonify({"message": "A imagem não pode ultrapassar 4 MB."}), 400)
+    return image, content, None
 
 
 def admin_authorized():
@@ -188,12 +207,13 @@ def listar_servicos():
             "titulo": card.titulo,
             "descricao": card.descricao,
             "imagem_url": f"/api/servicos/{card.chave}/imagem?v={int(card.atualizado_em.timestamp())}" if card.imagem_dados else None,
+            "personalizado": card.chave not in SERVICE_KEYS,
         } for card in cards]})
 
 
 @app.get("/api/servicos/<chave>/imagem")
 def imagem_servico(chave):
-    if not Session or chave not in SERVICE_KEYS:
+    if not Session:
         return jsonify({"message": "Imagem não encontrada."}), 404
     with Session() as session:
         card = session.get(ServicoCard, chave)
@@ -217,7 +237,7 @@ def atualizar_servico(chave):
     unauthorized = require_admin()
     if unauthorized:
         return unauthorized
-    if not Session or chave not in SERVICE_KEYS:
+    if not Session:
         return jsonify({"message": "Serviço inválido."}), 400
 
     title = (request.form.get("titulo") or "").strip()
@@ -225,17 +245,14 @@ def atualizar_servico(chave):
     if not title or not description:
         return jsonify({"message": "Informe título e descrição."}), 400
 
-    image = request.files.get("imagem")
-    image_content = None
-    if image and image.filename:
-        if image.mimetype not in {"image/jpeg", "image/png", "image/webp"}:
-            return jsonify({"message": "Envie uma imagem JPG, PNG ou WebP."}), 400
-        image_content = image.read()
-        if len(image_content) > 4 * 1024 * 1024:
-            return jsonify({"message": "A imagem não pode ultrapassar 4 MB."}), 400
+    image, image_content, image_error = service_image()
+    if image_error:
+        return image_error
 
     with Session.begin() as session:
         card = session.get(ServicoCard, chave)
+        if not card and chave not in SERVICE_KEYS:
+            return jsonify({"message": "Serviço não encontrado."}), 404
         if not card:
             card = ServicoCard(chave=chave, titulo=title, descricao=description)
             session.add(card)
@@ -249,18 +266,61 @@ def atualizar_servico(chave):
     return jsonify({"success": True, "message": "Card atualizado."})
 
 
+@app.post("/api/admin/servicos")
+def criar_servico():
+    unauthorized = require_admin()
+    if unauthorized:
+        return unauthorized
+    if not Session:
+        return jsonify({"message": "Banco de dados não configurado."}), 503
+
+    title = (request.form.get("titulo") or "").strip()
+    description = (request.form.get("descricao") or "").strip()
+    if not title or not description:
+        return jsonify({"message": "Informe título e descrição."}), 400
+    image, image_content, image_error = service_image()
+    if image_error:
+        return image_error
+    if not image_content:
+        return jsonify({"message": "Envie uma imagem para o novo serviço."}), 400
+
+    with Session.begin() as session:
+        base_key = service_key(title)
+        existing_titles = (card.titulo.casefold() for card in session.query(ServicoCard).all())
+        if base_key in SERVICE_KEYS or title.casefold() in existing_titles:
+            return jsonify({"message": "Já existe um serviço com esse título."}), 409
+        key = base_key
+        suffix = 2
+        while session.get(ServicoCard, key) or key in SERVICE_KEYS:
+            key = f"{base_key[:60]}-{suffix}"
+            suffix += 1
+        card = ServicoCard(
+            chave=key,
+            titulo=title,
+            descricao=description,
+            imagem_nome=image.filename[:255],
+            imagem_mime=image.mimetype,
+            imagem_dados=image_content,
+        )
+        session.add(card)
+    return jsonify({"success": True, "message": "Novo serviço adicionado.", "chave": key}), 201
+
+
 @app.delete("/api/admin/servicos/<chave>")
 def restaurar_servico(chave):
     unauthorized = require_admin()
     if unauthorized:
         return unauthorized
-    if not Session or chave not in SERVICE_KEYS:
+    if not Session:
         return jsonify({"message": "Serviço inválido."}), 400
     with Session.begin() as session:
         card = session.get(ServicoCard, chave)
+        if not card and chave not in SERVICE_KEYS:
+            return jsonify({"message": "Serviço não encontrado."}), 404
         if card:
             session.delete(card)
-    return jsonify({"success": True, "message": "Card restaurado para o padrão."})
+    message = "Card restaurado para o padrão." if chave in SERVICE_KEYS else "Serviço excluído."
+    return jsonify({"success": True, "message": message})
 
 
 @app.get("/api/admin/orcamentos")
