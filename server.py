@@ -82,9 +82,21 @@ if engine:
 def parse_float(value):
     if not value:
         return None
+    try:
+        return float(value.replace(",", "."))
+    except (AttributeError, ValueError):
+        return None
 
 
 SERVICE_KEYS = {
+    "instalacao-ar-condicionado",
+    "manutencao-ar-condicionado",
+    "higienizacao-ar-condicionado",
+    "limpeza-ar-condicionado",
+    "instalacoes-eletricas",
+    "reparos-eletricos",
+}
+LEGACY_SERVICE_KEYS = {
     "instalacao-paineis",
     "instalacao-sistema-fotovoltaico",
     "instalacao-eletrica",
@@ -122,10 +134,6 @@ def require_admin():
     if not admin_authorized():
         return jsonify({"message": "Acesso não autorizado."}), 401
     return None
-    try:
-        return float(value.replace(",", "."))
-    except (AttributeError, ValueError):
-        return None
 
 
 @app.get("/")
@@ -138,7 +146,7 @@ def health():
             connected = True
         except Exception:
             pass
-    return jsonify({"status": "ok", "servico": "DELL LIMPE API", "banco_conectado": connected})
+    return jsonify({"status": "ok", "servico": "CLENILDO API", "banco_conectado": connected})
 
 
 @app.post("/api/orcamentos")
@@ -192,7 +200,7 @@ def criar_orcamento():
     return jsonify({
         "success": True,
         "id": quote_id,
-        "message": "Solicitação recebida! A DELL LIMPE entrará em contato.",
+        "message": "Solicitação recebida! O CLENILDO entrará em contato.",
     }), 201
 
 
@@ -201,7 +209,7 @@ def listar_servicos():
     if not Session:
         return jsonify({"servicos": []})
     with Session() as session:
-        cards = session.query(ServicoCard).all()
+        cards = session.query(ServicoCard).filter(~ServicoCard.chave.in_(LEGACY_SERVICE_KEYS)).all()
         return jsonify({"servicos": [{
             "chave": card.chave,
             "titulo": card.titulo,

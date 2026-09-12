@@ -2,14 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dellimpe1-hub.github.io/dellimpe/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <lastmod>2026-09-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
-  <url><loc>https://dellimpe1-hub.github.io/dellimpe/instalacao-de-paineis.html</loc><priority>0.8</priority></url>
-  <url><loc>https://dellimpe1-hub.github.io/dellimpe/instalacao-de-sistemas-fotovoltaicos.html</loc><priority>0.8</priority></url>
-  <url><loc>https://dellimpe1-hub.github.io/dellimpe/instalacao-eletrica.html</loc><priority>0.8</priority></url>
-  <url><loc>https://dellimpe1-hub.github.io/dellimpe/manutencao-preventiva-fotovoltaica.html</loc><priority>0.8</priority></url>
-  <url><loc>https://dellimpe1-hub.github.io/dellimpe/limpeza-dos-paineis-solares.html</loc><priority>0.8</priority></url>
-  <url><loc>https://dellimpe1-hub.github.io/dellimpe/manutencao-de-sistemas-fotovoltaicos.html</loc><priority>0.8</priority></url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/instalacao-ar-condicionado.html</loc><priority>0.8</priority></url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/manutencao-ar-condicionado.html</loc><priority>0.8</priority></url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/higienizacao-ar-condicionado.html</loc><priority>0.8</priority></url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/limpeza-ar-condicionado.html</loc><priority>0.8</priority></url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/instalacoes-eletricas.html</loc><priority>0.8</priority></url>
+  <url><loc>https://dellimpe1-hub.github.io/dellimpe/reparos-eletricos.html</loc><priority>0.8</priority></url>
 </urlset>
