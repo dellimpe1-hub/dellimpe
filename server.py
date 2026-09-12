@@ -97,6 +97,7 @@ SERVICE_KEYS = {
     "reparos-eletricos",
 }
 LEGACY_SERVICE_KEYS = {
+    "aplicacao-de-pelicula-liquida",
     "instalacao-paineis",
     "instalacao-sistema-fotovoltaico",
     "instalacao-eletrica",
